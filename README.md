@@ -1,6 +1,3 @@
-# PhD_Programs
-This repository contains programs developed during my PhD for setting up and analyzing molecular systems for grafting.
-
 ## GrafTo
 
 ![plot](logo.png)
