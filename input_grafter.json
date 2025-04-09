@@ -17,17 +17,11 @@
         "from": true
     },
     "chain dispersity": {
-        "monodisperse": [
-            [
-                184,
-                0.6
-            ],
-            [
-                470,
-                0.4
-            ]
-        ],
-        "polydisperse": false
+        "monodisperse": false,
+        "polydisperse": [
+            1.3,
+            100
+        ]
     },
     "atom names": {
         "polymer": [

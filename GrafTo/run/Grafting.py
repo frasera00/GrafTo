@@ -155,7 +155,6 @@ class NewSystem(Asm):
 
     @universe.setter
     def universe(self, value: mda.Universe) -> None:
-        print(f"Setting universe to: {value}")
         self._universe = value
 
     def plot_mol_distribution(
@@ -759,6 +758,22 @@ class NewSystem(Asm):
             - self.dataframes["unified"] with merged dataframe
             - System dimensions via update_dimensions()
         """
+
+        # Debug: Verify all required dataframes exist
+        required_dfs = ["polymer", "under_polymer", "layer", "bulk"]
+        for df_name in required_dfs:
+            if df_name not in self.dataframes:
+                raise ValueError(f"Missing required dataframe: {df_name}")
+            if self.dataframes[df_name].empty:
+                raise ValueError(f"Dataframe {df_name} is empty")
+        
+        # Debug: Check molecule sizes
+        if not hasattr(self, 'molecule_sizes') or not self.molecule_sizes:
+            raise ValueError("No molecule sizes defined")
+
+        # Get under_polymer dataframe
+        under_polymer_df = self.dataframes["under_polymer"]
+
         # Initialize empty dataframe with correct columns
         columns = ["x", "y", "z", "bead", "type"]
         df_mol = pd.DataFrame(columns=columns)
@@ -770,6 +785,7 @@ class NewSystem(Asm):
             
             # Process each silane molecule
             start_idx = 0
+            under_polymer_idx = 0
             polymer_start = 0
             
             for mol_size in self.molecule_sizes:
@@ -793,11 +809,19 @@ class NewSystem(Asm):
                 df_mol.iloc[start_idx+1:mol_end, df_mol.columns.get_loc('bead')] = polymer_bead
                 
                 # Add corresponding under_polymer atom
-                under_polymer_atom = self.dataframes["under_polymer"].iloc[[polymer_start//mol_size]]
+                if under_polymer_idx >= len(under_polymer_df):
+                    raise ValueError(
+                        f"Invalid under_polymer index {under_polymer_idx} "
+                        f"(max {len(under_polymer_df)-1}). "
+                        f"polymer_start={polymer_start}, mol_size={mol_size}"
+                    )
+        
+                under_polymer_atom = under_polymer_df.iloc[[under_polymer_idx]].copy()                
                 df_mol = pd.concat([df_mol, under_polymer_atom], axis=0, ignore_index=True)
                 df_mol.iloc[-1, df_mol.columns.get_loc('type')] += str(mol_size)
                 
                 # Update indices
+                under_polymer_idx += 1
                 polymer_start = polymer_end
                 start_idx = mol_end + 1  # +1 for the under_polymer atom
         

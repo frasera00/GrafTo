@@ -94,10 +94,12 @@ class Plotter:
         ax3.set_xlabel("x, $\AA$")
         ax3.set_ylabel("y, $\AA$")
 
+        plt.show()
+
         if outFile:    
             fig.savefig(outFile, dpi=350)
 
-        return fig, axes
+        return
 
     def extract_sequences(self,arr):
         sequences = []
