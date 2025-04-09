@@ -1,14 +1,14 @@
 {
-    "folder": "/Users/frasera/Ricerca/PhD_Programs/POLY",
-    "surface_distance": 0.5,
-    "grafting_density": 0.3,
+    "root directory": "/Users/frasera/Ricerca/PhD_Programs/POLY",
+    "surface distance": 0.5,
+    "grafting density": 0.3,
     "perturbation": 0,
-    "name": "POLY",
+    "system name": "POLY",
     "matrix": {
         "file": false,
         "size": [
-            50,
-            10,
+            80,
+            80,
             9
         ]
     },
@@ -19,16 +19,12 @@
     "chain dispersity": {
         "monodisperse": [
             [
-                100,
-                0.2
+                184,
+                0.6
             ],
             [
-                30,
-                0.3
-            ],
-            [
-                20,
-                0.5
+                470,
+                0.4
             ]
         ],
         "polydisperse": false

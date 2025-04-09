@@ -2,10 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import MDAnalysis as mda
 import pandas as pd
+import MDAnalysis as mda
 
 class Plotter:
-    def __init__(self, folder):
-        self.folder = folder
+
+    def __init__(self, parent_system) -> None:
+        self.parent = parent_system
+        self.root_dir = parent_system.root_dir
+    
+    @property
+    def universe(self):
+        """Always gets current universe from parent"""
+        return self.parent.universe
 
     @staticmethod
     def stylize_plot(axis, xlab, ylab, labelsize=14, ticksize=12, hide=["right","top"], ticks = {"top":False,"bottom":True,"left":True,"right":False}):
@@ -23,6 +31,15 @@ class Plotter:
         return
     
     def plot_system(self, colors=None, names=None, outFile=None, universe=None, axes=None, s=2, zorders=None):
+        u = universe if universe is not None else self.universe
+        
+        if u is None:
+            raise ValueError(
+                "No universe available for plotting.\n"
+                f"Parent universe: {self.parent.universe}\n"
+                f"Passed universe: {universe}"
+            )
+        
         dfs = {}
         
         if universe is None:
