@@ -1,5 +1,5 @@
 {
-    "folder": "/Users/frasera/Ricerca/scripts/MONO",
+    "root_directory": "/Users/frasera/Ricerca/scripts/MONO",
     "blocks": [
         "piston1.gro",
         "initial_config.gro",

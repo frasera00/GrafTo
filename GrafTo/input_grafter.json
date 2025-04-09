@@ -1,9 +1,9 @@
 {
-    "folder": "/Users/frasera/Ricerca/scripts/MONO",
-    "surface_distance": 0.5,
-    "grafting_density": 0.3,
+    "root directory": "/Users/frasera/Ricerca/scripts/MONO",
+    "surface distance": 0.5,
+    "grafting density": 0.3,
     "perturbation": 0,
-    "name": "MONO",
+    "system name": "MONO",
     "matrix": {
         "file": "/Users/frasera/Ricerca/scripts/MONO/modified.gro",
         "size": false

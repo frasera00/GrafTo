@@ -4,8 +4,15 @@ import MDAnalysis as mda
 import subprocess
 
 class Builder:
-    def __init__(self,folder):
-        self.folder = folder
+    
+    def __init__(self, parent_system) -> None:
+        self.parent = parent_system
+        self.root_dir = parent_system.root_dir
+    
+    @property
+    def universe(self):
+        """Always gets current universe from parent"""
+        return self.parent.universe
 
     def build_fcc(self, space,Lbox_x,Lbox_y,Lbox_z):
         a = 2*space/np.sqrt(2)
@@ -112,7 +119,7 @@ class Builder:
         df = pd.DataFrame({"x":x, "y":y, "z":z})
         return df,l_x,l_y,l_z
 
-    def solvate(self, gmxSource, cp, cs, out, top, pbcBox, maxN, folder=None):
+    def solvate(self, gmxSource, cp, cs, out, top, pbcBox, maxN, root_dir=None):
         """
         solvates a system using GROMACS solvate command.
 
@@ -124,15 +131,15 @@ class Builder:
             top (str): Path to the topology file (.top) of the system.
             pbcBox (tuple): Tuple containing the dimensions of the simulation box (x, y, z).
             maxN (int): Maximum number of solvent molecules to add.
-            folder (str, optional): Path to the folder where the solvation will be performed. Defaults to None.
+            root_dir (str, optional): Path to the root_dir where the solvation will be performed. Defaults to None.
 
         Returns:
             None
         """
         import subprocess
 
-        if not folder:
-            folder = self.folder
+        if not root_dir:
+            root_dir = self.root_dir
 
         if top:
             app = f"-p {top}"
@@ -140,16 +147,16 @@ class Builder:
             app = " "
 
         command = f"mpirun -n 1 --bind-to none gmx_mpi solvate -cp {cp} -cs {cs} -o {out} -scale 1 -radius 0.2 " + app + f" -box {pbcBox[0]} {pbcBox[1]} {pbcBox[2]} -maxsol {maxN} > solvation.log 2>&1;"
-        subprocess.run(f"cd {folder};" +
+        subprocess.run(f"cd {root_dir};" +
                        f"source {gmxSource} > /dev/null 2>&1;" +
                        command,
                        shell=True, executable="/bin/bash")
 
-        self.universe = mda.Universe(f"{folder}/{out}")
+        self.universe = mda.Universe(f"{root_dir}/{out}")
         return
 
     @staticmethod
-    def solv_box(folder,gmxSource,outName,solv,boxSize,positions,pbcBox,numMols,into=None): 
+    def solv_box(root_dir,gmxSource,outName,solv,boxSize,positions,pbcBox,numMols,into=None): 
         """
         solvates a box with molecules using GROMACS.
 
@@ -161,7 +168,7 @@ class Builder:
         - positions (list): List of position ranges [[lower_x, upper_x], [lower_y, upper_y], [lower_z, upper_z]].
         - pbcBox (list): Simulation box coordinates [x, y, z].
         - numMols (int): Number of solvent molecules to insert.
-        - folder (str, optional): Path to the folder where the commands will be executed. Defaults to None.
+        - root_dir (str, optional): Path to the root_dir where the commands will be executed. Defaults to None.
 
         Returns:
         - None
@@ -183,7 +190,7 @@ class Builder:
         else:
             extra = " "
 
-        subprocess.run(f"cd {folder};"+
+        subprocess.run(f"cd {root_dir};"+
                         f"source {gmxSource} > /dev/null 2>&1;"+
                         f"mpirun -n 1 --bind-to none gmx_mpi insert-molecules {extra} -ci {solv} -o {outName} -radius 0.2 -scale 1 -try {numMols*5} -box {boxSize[0]} {boxSize[1]} {boxSize[2]} -nmol {numMols} >> insert.log 2>&1;"+
                         f"mpirun -n 1 --bind-to none gmx_mpi editconf -f {outName} -center {x} {y} {z} -o centered_{outName} -box {pbcBox[0]} {pbcBox[1]} {pbcBox[2]} > centering.log 2>&1",
