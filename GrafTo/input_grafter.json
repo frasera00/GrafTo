@@ -1,25 +1,32 @@
 {
-    "root directory": "/Users/frasera/Ricerca/scripts/MONO",
+    "root directory": "/Users/frasera/Ricerca/PhD_Programs/POLY",
     "surface distance": 0.5,
     "grafting density": 0.3,
     "perturbation": 0,
-    "system name": "MONO",
+    "system name": "POLY",
     "matrix": {
-        "file": "/Users/frasera/Ricerca/scripts/MONO/modified.gro",
-        "size": false
+        "file": false,
+        "size": [
+            80,
+            80,
+            9
+        ]
     },
     "grafting method": {
         "to": false,
         "from": true
     },
     "chain dispersity": {
-        "monodisperse": 4,
-        "polydisperse": false
+        "monodisperse": false,
+        "polydisperse": [
+            1.3,
+            100
+        ]
     },
     "atom names": {
         "polymer": [
-            "SIL",
-            "C1"
+            "PDMS",
+            "DMS"
         ],
         "bulk": [
             "BULK",
@@ -30,12 +37,12 @@
             "N1L"
         ],
         "under_polymer": [
-            "SIL",
+            "PDMS",
             "N1L1"
         ]
     },
     "surface geometry": {
-        "cylindrical": true,
-        "flat": false
+        "cylindrical": false,
+        "flat": true
     }
 }
