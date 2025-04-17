@@ -19,13 +19,19 @@ Required packages:
 
 ## Contents
 
- - Grafting.py: Core module for building and analyzing grafting systems
- -  Notebook: Notebook_create_system_pore.ipynb
- - Notebook: Notebook_create_system_PDMS.ipynb
- - Notebook: Analysis_CAH.ipynb
- - Notebook: Analysis_marching_cubes.ipynb
- - Notebook: Analysis_orientation.ipynb
- - Notebook: Analysis_marching_cubes.ipynb
+ - GrafTo
+    - input_assembler.json -> inputs for assembling systems
+    - input_grafter.json   -> inputs for building grafted systems
+    - analysis             -> modules for analysis of MD trajectories
+    - run                  -> main classes. Grafter interfaces with all building and analysis modules
+    - utils                -> utilities
+ - Notebooks
+    - Notebook_create_system_pore.ipynb
+    - Notebook_create_system_PDMS.ipynb
+    - Analysis_CAH.ipynb
+    - Analysis_marching_cubes.ipynb
+    - Analysis_orientation.ipynb
+    - Analysis_marching_cubes.ipynb
 
 ## Running the Grafter for creating systems
 
