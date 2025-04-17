@@ -1,6 +1,6 @@
 ## GrafTo
 
-![plot](logo.png)
+![plot](GrafTo_logo.png)
 
 The GrafTo program is designed to construct and analyze molecular systems with grafted structures. It provides an interface to build surfaces, apply grafting techniques, and calculate properties such as mean square displacement, layer height, and density profiles.
 
